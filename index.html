@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Planner</title>
+  <style>
+    /*
+      CSS controls how the app looks.
+      The design is minimal: soft background, simple borders, calm colors,
+      and enough spacing so the planner feels easy to use.
+    */
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: #f5f6f1;
+      color: #1f241f;
+      min-height: 100vh;
+    }
+
+    .app {
+      width: min(1240px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 42px 0;
+    }
+
+    .top-bar {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: end;
+      margin-bottom: 24px;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      font-size: 40px;
+      letter-spacing: 0;
+      line-height: 1.05;
+    }
+
+    h2 {
+      font-size: 19px;
+      margin-bottom: 18px;
+    }
+
+    h3 {
+      font-size: 15px;
+    }
+
+    .subtitle {
+      color: #6b7569;
+      margin-top: 10px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #495346;
+    }
+
+    input,
+    textarea,
+    button {
+      font: inherit;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      border: 1px solid #dde3d6;
+      border-radius: 12px;
+      background: #fffefb;
+      color: #1f241f;
+      padding: 13px 14px;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: #377957;
+      background: #ffffff;
+      box-shadow: 0 0 0 4px rgba(55, 121, 87, 0.12);
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    button {
+      border: 0;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .date-field {
+      width: 210px;
+    }
+
+    .quote-card {
+      position: relative;
+      overflow: hidden;
+      background: #fffefb;
+      border: 1px solid rgba(222, 228, 216, 0.9);
+      border-radius: 20px;
+      box-shadow: 0 18px 45px rgba(44, 54, 43, 0.08);
+      padding: 26px 28px;
+      margin-bottom: 24px;
+    }
+
+    .quote-card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 5px;
+      height: 100%;
+      background: #7fa180;
+    }
+
+    .quote-label {
+      color: #6f7c6c;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .quote-text {
+      color: #232922;
+      font-size: 23px;
+      font-style: italic;
+      line-height: 1.5;
+      max-width: 900px;
+    }
+
+    .quote-author {
+      color: #778273;
+      font-size: 14px;
+      margin-top: 14px;
+    }
+
+    .add-button {
+      background: #1f2a22;
+      color: #fffefb;
+      padding: 13px 20px;
+      box-shadow: 0 10px 20px rgba(31, 42, 34, 0.14);
+    }
+
+    .add-button:hover {
+      background: #31543d;
+      box-shadow: 0 14px 26px rgba(49, 84, 61, 0.18);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .main-column {
+      display: grid;
+      gap: 24px;
+    }
+
+    .panel {
+      background: #fffefb;
+      border: 1px solid rgba(222, 228, 216, 0.95);
+      border-radius: 18px;
+      box-shadow: 0 16px 38px rgba(44, 54, 43, 0.06);
+      padding: 24px;
+    }
+
+    .task-form {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .task-list,
+    .date-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .empty-message {
+      border: 1px dashed #cfd6ca;
+      border-radius: 14px;
+      background: #fbfcf7;
+      color: #6b7569;
+      padding: 18px;
+      text-align: center;
+    }
+
+    .task-card {
+      border: 1px solid rgba(220, 226, 214, 0.95);
+      border-radius: 16px;
+      background: #fffefb;
+      box-shadow: 0 10px 26px rgba(44, 54, 43, 0.055);
+      padding: 16px;
+      transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .task-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 32px rgba(44, 54, 43, 0.08);
+    }
+
+    /*
+      JavaScript adds "done" when the checkbox is clicked.
+      The animation makes the card gently pop and turn green.
+    */
+    .task-card.done {
+      animation: completePulse 0.45s ease;
+      background: #e1f5e3;
+      border-color: #76bd7d;
+      box-shadow: 0 16px 32px rgba(70, 130, 82, 0.14);
+    }
+
+    /*
+      JavaScript adds "missed" when the X button is clicked.
+      This uses a calm red color so unfinished tasks are clear but not harsh.
+    */
+    .task-card.missed {
+      background: #fff2ef;
+      border-color: #dc8b7a;
+    }
+
+    @keyframes completePulse {
+      0% {
+        transform: scale(1);
+      }
+
+      45% {
+        transform: scale(1.02);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .task-top {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .complete-checkbox {
+      width: 22px;
+      height: 22px;
+      accent-color: #2f8b4d;
+      cursor: pointer;
+    }
+
+    .task-title {
+      font-weight: 700;
+      line-height: 1.35;
+      overflow-wrap: anywhere;
+      color: #242a23;
+    }
+
+    .task-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .icon-button {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      background: #f0f3eb;
+      color: #263026;
+      padding: 0;
+      font-size: 16px;
+      line-height: 1;
+      box-shadow: inset 0 0 0 1px rgba(210, 218, 204, 0.9);
+    }
+
+    .icon-button:hover {
+      background: #e4ebdf;
+      box-shadow: inset 0 0 0 1px rgba(188, 201, 180, 0.95), 0 8px 16px rgba(44, 54, 43, 0.08);
+    }
+
+    .missed-button.active {
+      background: #c94f3d;
+      color: white;
+      box-shadow: 0 10px 20px rgba(201, 79, 61, 0.18);
+    }
+
+    .delete-button {
+      font-size: 14px;
+    }
+
+    .task-notes {
+      min-height: 76px;
+      margin-top: 14px;
+      background: #fbfcf7;
+    }
+
+    .journal {
+      min-height: 260px;
+      background: #fbfcf7;
+      line-height: 1.55;
+    }
+
+    .date-button {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      width: 100%;
+      text-align: left;
+      background: #fbfcf7;
+      color: #242a23;
+      border: 1px solid #e0e5da;
+      padding: 14px;
+      box-shadow: 0 8px 18px rgba(44, 54, 43, 0.035);
+    }
+
+    .date-button:hover {
+      background: #f0f5ed;
+      border-color: #cbd8c5;
+      box-shadow: 0 12px 24px rgba(44, 54, 43, 0.06);
+    }
+
+    .date-button.active {
+      background: #1f2a22;
+      color: #fffefb;
+      border-color: #1f2a22;
+      box-shadow: 0 12px 24px rgba(31, 42, 34, 0.12);
+    }
+
+    .date-meta {
+      color: inherit;
+      opacity: 0.72;
+      font-size: 13px;
+      margin-top: 3px;
+    }
+
+    .date-count {
+      align-self: center;
+      border-radius: 999px;
+      background: rgba(32, 37, 31, 0.1);
+      padding: 4px 8px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .date-button.active .date-count {
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    @media (max-width: 860px) {
+      .top-bar,
+      .layout,
+      .task-form {
+        grid-template-columns: 1fr;
+      }
+
+      .date-field {
+        width: 100%;
+      }
+
+      h1 {
+        font-size: 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="top-bar">
+      <div>
+        <h1>Daily Planner</h1>
+        <p class="subtitle">Plan one day at a time, then come back tomorrow.</p>
+      </div>
+
+      <div class="date-field">
+        <label for="plannerDate">Current day</label>
+        <input id="plannerDate" type="date" required>
+      </div>
+    </header>
+
+    <section class="quote-card" aria-labelledby="dailyQuoteTitle">
+      <p class="quote-label" id="dailyQuoteTitle">Daily Quote</p>
+      <p class="quote-text" id="quoteText"></p>
+      <p class="quote-author" id="quoteAuthor"></p>
+    </section>
+
+    <div class="layout">
+      <div class="main-column">
+        <section class="panel">
+          <h2>Tasks</h2>
+
+          <form class="task-form" id="taskForm">
+            <input id="taskInput" type="text" placeholder="Add a task" autocomplete="off" required>
+            <button class="add-button" type="submit">Add</button>
+          </form>
+
+          <div class="task-list" id="taskList"></div>
+        </section>
+
+        <section class="panel">
+          <h2>Journal</h2>
+          <label for="journalInput">Daily journal</label>
+          <textarea id="journalInput" class="journal" placeholder="Write about your day..."></textarea>
+        </section>
+      </div>
+
+      <aside class="panel">
+        <h2>Planned dates</h2>
+        <div class="date-list" id="dateList"></div>
+      </aside>
+    </div>
+  </main>
+
+  <script>
+    /*
+      JavaScript controls what the app does.
+      This app stores everything in localStorage, so your tasks, notes,
+      journal, and planned dates stay after refreshing the browser.
+    */
+
+    // These connect JavaScript to the HTML elements.
+    const plannerDate = document.querySelector("#plannerDate");
+    const taskForm = document.querySelector("#taskForm");
+    const taskInput = document.querySelector("#taskInput");
+    const taskList = document.querySelector("#taskList");
+    const journalInput = document.querySelector("#journalInput");
+    const dateList = document.querySelector("#dateList");
+    const quoteText = document.querySelector("#quoteText");
+    const quoteAuthor = document.querySelector("#quoteAuthor");
+
+    // This is the name used to save the planner in localStorage.
+    const storageKey = "simpleDailyPlanner";
+
+    // Each quote has text and an author.
+    const quotes = [
+      { text: "We are what we repeatedly do. Excellence, then, is not an act but a habit.", author: "Aristotle" },
+      { text: "He who has a why to live can bear almost any how.", author: "Friedrich Nietzsche" },
+      { text: "Discipline equals freedom.", author: "Jocko Willink" },
+      { text: "Small daily improvements are the key to staggering long-term results.", author: "Robin Sharma" },
+      { text: "The man who moves a mountain begins by carrying away small stones.", author: "Confucius" },
+      { text: "Success is the sum of small efforts repeated day in and day out.", author: "Robert Collier" },
+      { text: "Do not pray for an easy life, pray for the strength to endure a difficult one.", author: "Bruce Lee" },
+      { text: "The future depends on what you do today.", author: "Mahatma Gandhi" },
+      { text: "Action is the foundational key to all success.", author: "Pablo Picasso" },
+      { text: "What we think, we become.", author: "Buddha" },
+      { text: "If you’re going through hell, keep going.", author: "Winston Churchill" },
+      { text: "You become what you give your attention to.", author: "Epictetus" },
+      { text: "The obstacle is the way.", author: "Marcus Aurelius" },
+      { text: "Waste no more time arguing what a good man should be. Be one.", author: "Marcus Aurelius" },
+      { text: "Fortune favors the bold.", author: "Virgil" },
+      { text: "A person who never made a mistake never tried anything new.", author: "Albert Einstein" },
+      { text: "Dreams without goals remain dreams.", author: "Denzel Washington" },
+      { text: "Motivation gets you going, but discipline keeps you growing.", author: "John C. Maxwell" },
+      { text: "The successful warrior is the average man with laser-like focus.", author: "Bruce Lee" },
+      { text: "Knowing yourself is the beginning of all wisdom.", author: "Aristotle" },
+      { text: "No pressure, no diamonds.", author: "Thomas Carlyle" },
+      { text: "Do what you can, with what you have, where you are.", author: "Theodore Roosevelt" },
+      { text: "Great things are done by a series of small things brought together.", author: "Vincent van Gogh" },
+      { text: "You must endure the process to enjoy the result.", author: "Unknown" },
+      { text: "Hard choices, easy life. Easy choices, hard life.", author: "Jerzy Gregorek" },
+      { text: "The pain of discipline is far less than the pain of regret.", author: "Sarah Bombell" },
+      { text: "Your habits shape your future.", author: "Jack Canfield" },
+      { text: "Energy and persistence conquer all things.", author: "Benjamin Franklin" },
+      { text: "What you do today can improve all your tomorrows.", author: "Ralph Marston" },
+      { text: "Nothing will work unless you do.", author: "Maya Angelou" },
+      { text: "It always seems impossible until it’s done.", author: "Nelson Mandela" },
+      { text: "A year from now you may wish you had started today.", author: "Karen Lamb" },
+      { text: "The secret of getting ahead is getting started.", author: "Mark Twain" },
+      { text: "Stay patient and trust your journey.", author: "Unknown" },
+      { text: "The best investment you can make is in yourself.", author: "Warren Buffett" },
+      { text: "Without struggle, there is no progress.", author: "Frederick Douglass" },
+      { text: "Be stronger than your excuses.", author: "Unknown" },
+      { text: "You don’t rise to the level of your goals. You fall to the level of your systems.", author: "James Clear" },
+      { text: "The cost of procrastination is the life you could have lived.", author: "Unknown" },
+      { text: "Every moment is a fresh beginning.", author: "T.S. Eliot" },
+      { text: "Do something today your future self will thank you for.", author: "Unknown" },
+      { text: "A river cuts through rock not because of its power but because of its persistence.", author: "James N. Watkins" },
+      { text: "Success is never owned. It is rented, and the rent is due every day.", author: "Rory Vaden" },
+      { text: "Greatness requires consistency.", author: "Unknown" },
+      { text: "Focus on being productive instead of busy.", author: "Tim Ferriss" },
+      { text: "The strongest people are forged by adversity.", author: "Unknown" },
+      { text: "Your direction matters more than your speed.", author: "Unknown" },
+      { text: "Courage is resistance to fear, mastery of fear, not absence of fear.", author: "Mark Twain" },
+      { text: "Difficulties strengthen the mind, as labor does the body.", author: "Seneca" },
+      { text: "The only limit to our realization of tomorrow is our doubts of today.", author: "Franklin D. Roosevelt" },
+      { text: "The difference between who you are and who you want to be is what you do.", author: "Unknown" },
+      { text: "Work hard in silence. Let success make the noise.", author: "Frank Ocean" },
+      { text: "Comfort is the enemy of progress.", author: "P.T. Barnum" },
+      { text: "Your life does not get better by chance. It gets better by change.", author: "Jim Rohn" },
+      { text: "Don’t count the days. Make the days count.", author: "Muhammad Ali" },
+      { text: "The quieter you become, the more you can hear.", author: "Ram Dass" },
+      { text: "Persistence guarantees that results are inevitable.", author: "Paramahansa Yogananda" },
+      { text: "Success is built on consistency.", author: "Unknown" },
+      { text: "The way to get started is to quit talking and begin doing.", author: "Walt Disney" },
+      { text: "Your mindset determines your reality.", author: "Unknown" },
+      { text: "Pressure creates strength.", author: "Unknown" },
+      { text: "The harder the battle, the sweeter the victory.", author: "Les Brown" },
+      { text: "Do not fear failure but rather fear not trying.", author: "Roy T. Bennett" },
+      { text: "Fall seven times and stand up eight.", author: "Japanese Proverb" },
+      { text: "Every accomplishment starts with the decision to try.", author: "John F. Kennedy" },
+      { text: "Self-control is strength. Calmness is mastery.", author: "James Allen" },
+      { text: "You are your longest commitment.", author: "Unknown" },
+      { text: "If you want to conquer fear, do not sit home and think about it. Go out and get busy.", author: "Dale Carnegie" },
+      { text: "There is no growth in the comfort zone.", author: "Unknown" },
+      { text: "The comeback is always stronger than the setback.", author: "Unknown" },
+      { text: "Don’t downgrade your dream just to fit your reality.", author: "Unknown" },
+      { text: "Build discipline before motivation disappears.", author: "Unknown" },
+      { text: "Success starts with self-discipline.", author: "Unknown" },
+      { text: "Master yourself and you master your future.", author: "Unknown" },
+      { text: "Doubt kills more dreams than failure ever will.", author: "Suzy Kassem" },
+      { text: "You become unstoppable when you work on things people cannot take away from you.", author: "Unknown" },
+      { text: "Train your mind to stay calm under pressure.", author: "Unknown" },
+      { text: "Ambition is the path to success. Persistence is the vehicle you arrive in.", author: "Bill Bradley" },
+      { text: "One day or day one. You decide.", author: "Unknown" },
+      { text: "Discomfort is growth in disguise.", author: "Unknown" },
+      { text: "Nothing changes if nothing changes.", author: "Unknown" },
+      { text: "The disciplined are free.", author: "Eliud Kipchoge" },
+      { text: "Do hard things regularly.", author: "Unknown" },
+      { text: "The person you will be in five years depends on what you do today.", author: "Unknown" },
+      { text: "Your consistency creates your identity.", author: "Unknown" },
+      { text: "Win the day.", author: "Unknown" },
+      { text: "Stay hungry. Stay foolish.", author: "Steve Jobs" },
+      { text: "Your future is hidden in your daily routine.", author: "Mike Murdock" },
+      { text: "Mental toughness is doing the right thing for the team when it’s not the best thing for you.", author: "Bill Belichick" },
+      { text: "To suffer terribly and to know yourself as the cause: that is hell.", author: "C. S. Lewis" },
+      { text: "Becoming is better than being.", author: "Carol Dweck" },
+      { text: "The price of greatness is responsibility.", author: "Winston Churchill" },
+      { text: "A goal without a plan is only a wish.", author: "Antoine de Saint-Exupéry" },
+      { text: "Nothing worth having comes easy.", author: "Theodore Roosevelt" },
+      { text: "Success demands sacrifice.", author: "Unknown" },
+      { text: "You cannot have a positive life with a negative mind.", author: "Joyce Meyer" },
+      { text: "The strongest factor for success is self-esteem.", author: "Nathaniel Branden" },
+      { text: "Every master was once a beginner.", author: "Robin Sharma" },
+      { text: "The only way out is through.", author: "Robert Frost" },
+      { text: "Do not wait to feel motivated. Begin.", author: "Unknown" },
+      { text: "Consistency compounds.", author: "Unknown" },
+      { text: "A disciplined mind leads to happiness.", author: "Buddha" }
+    ];
+
+    /*
+      plannerData is an object. Each date has its own tasks and journal.
+      A task status can be:
+      "open"   = not finished yet
+      "done"   = completed with the checkbox
+      "missed" = marked with the X button
+    */
+    let plannerData = loadPlannerData();
+
+    // Start on today's date, then draw the page.
+    plannerDate.value = getToday();
+    showSelectedDay();
+    showQuote();
+
+    // Add a task when the user submits the form.
+    taskForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const taskText = taskInput.value.trim();
+
+      if (taskText === "") {
+        return;
+      }
+
+      const day = getSelectedDay();
+
+      day.tasks.push({
+        id: Date.now(),
+        text: taskText,
+        status: "open",
+        notes: ""
+      });
+
+      taskInput.value = "";
+      savePlannerData();
+      renderTasks();
+      renderDates();
+    });
+
+    // Changing the date shows a different day's tasks and journal.
+    plannerDate.addEventListener("change", showSelectedDay);
+
+    // Save the journal every time the user types.
+    journalInput.addEventListener("input", function () {
+      const day = getSelectedDay();
+      day.journal = journalInput.value;
+      savePlannerData();
+      renderDates();
+    });
+
+    // Load saved planner data from localStorage.
+    function loadPlannerData() {
+      const savedData = localStorage.getItem(storageKey);
+
+      if (savedData === null) {
+        return {};
+      }
+
+      try {
+        return JSON.parse(savedData);
+      } catch (error) {
+        return {};
+      }
+    }
+
+    // Save plannerData in the browser.
+    function savePlannerData() {
+      localStorage.setItem(storageKey, JSON.stringify(plannerData));
+    }
+
+    // Get today's local date in YYYY-MM-DD format.
+    function getToday() {
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, "0");
+      const day = String(today.getDate()).padStart(2, "0");
+
+      return `${year}-${month}-${day}`;
+    }
+
+    // Get the selected date's data. Create it if it does not exist yet.
+    function getSelectedDay() {
+      const date = plannerDate.value;
+
+      if (!plannerData[date]) {
+        plannerData[date] = {
+          tasks: [],
+          journal: ""
+        };
+      }
+
+      return plannerData[date];
+    }
+
+    // Older saved tasks used "done: true". This updates them to "status: done".
+    function updateOldTask(task) {
+      if (!task.status) {
+        task.status = task.done ? "done" : "open";
+      }
+
+      if (!task.notes) {
+        task.notes = "";
+      }
+    }
+
+    // Show everything for the selected day.
+    function showSelectedDay() {
+      const day = getSelectedDay();
+      day.tasks.forEach(updateOldTask);
+      journalInput.value = day.journal || "";
+      renderTasks();
+      renderDates();
+      savePlannerData();
+    }
+
+    // Draw all task cards for the selected day.
+    function renderTasks() {
+      const day = getSelectedDay();
+      taskList.innerHTML = "";
+
+      if (day.tasks.length === 0) {
+        taskList.innerHTML = '<div class="empty-message">No tasks yet.</div>';
+        return;
+      }
+
+      day.tasks.forEach(function (task) {
+        updateOldTask(task);
+
+        const taskCard = document.createElement("article");
+        taskCard.className = `task-card ${task.status}`;
+
+        taskCard.innerHTML = `
+          <div class="task-top">
+            <input class="complete-checkbox" type="checkbox" ${task.status === "done" ? "checked" : ""} aria-label="Mark task complete">
+            <div class="task-title">${escapeHTML(task.text)}</div>
+            <div class="task-actions">
+              <button class="icon-button missed-button ${task.status === "missed" ? "active" : ""}" type="button" aria-label="Mark task missed" title="Mark missed">X</button>
+              <button class="icon-button delete-button" type="button" aria-label="Delete task" title="Delete">Del</button>
+            </div>
+          </div>
+          <textarea class="task-notes" placeholder="Task notes...">${escapeHTML(task.notes)}</textarea>
+        `;
+
+        const checkbox = taskCard.querySelector(".complete-checkbox");
+        const missedButton = taskCard.querySelector(".missed-button");
+        const notes = taskCard.querySelector(".task-notes");
+        const deleteButton = taskCard.querySelector(".delete-button");
+
+        // The checkbox marks the task as done and turns the card green.
+        checkbox.addEventListener("change", function () {
+          task.status = checkbox.checked ? "done" : "open";
+          savePlannerData();
+          renderTasks();
+          renderDates();
+        });
+
+        // The X button marks a task that could not be completed.
+        missedButton.addEventListener("click", function () {
+          task.status = task.status === "missed" ? "open" : "missed";
+          savePlannerData();
+          renderTasks();
+          renderDates();
+        });
+
+        // Notes are saved while typing.
+        notes.addEventListener("input", function () {
+          task.notes = notes.value;
+          savePlannerData();
+        });
+
+        // Delete removes this task from the selected day.
+        deleteButton.addEventListener("click", function () {
+          day.tasks = day.tasks.filter(function (savedTask) {
+            return savedTask.id !== task.id;
+          });
+
+          savePlannerData();
+          renderTasks();
+          renderDates();
+        });
+
+        taskList.appendChild(taskCard);
+      });
+    }
+
+    // Draw the right-side list of days that have tasks or journal notes.
+    function renderDates() {
+      dateList.innerHTML = "";
+
+      const plannedDates = Object.keys(plannerData)
+        .filter(function (date) {
+          const day = plannerData[date];
+          return day.tasks.length > 0 || (day.journal && day.journal.trim() !== "");
+        })
+        .sort();
+
+      if (plannedDates.length === 0) {
+        dateList.innerHTML = '<div class="empty-message">No planned dates yet.</div>';
+        return;
+      }
+
+      plannedDates.forEach(function (date) {
+        const day = plannerData[date];
+        const doneCount = day.tasks.filter(function (task) {
+          updateOldTask(task);
+          return task.status === "done";
+        }).length;
+
+        const dateButton = document.createElement("button");
+        dateButton.className = "date-button";
+
+        if (date === plannerDate.value) {
+          dateButton.classList.add("active");
+        }
+
+        dateButton.innerHTML = `
+          <span>
+            <strong>${formatDate(date)}</strong>
+            <span class="date-meta">${day.tasks.length} task${day.tasks.length === 1 ? "" : "s"} - ${doneCount} done</span>
+          </span>
+          <span class="date-count">${day.tasks.length}</span>
+        `;
+
+        dateButton.addEventListener("click", function () {
+          plannerDate.value = date;
+          showSelectedDay();
+        });
+
+        dateList.appendChild(dateButton);
+      });
+    }
+
+    // Pick one quote for the current day. It will not change on refresh.
+    function showQuote() {
+      const dayIndex = Math.floor(Date.now() / (1000 * 60 * 60 * 24));
+      const quote = quotes[dayIndex % quotes.length];
+
+      quoteText.textContent = quote.text;
+      quoteAuthor.textContent = `- ${quote.author}`;
+    }
+
+    // Make YYYY-MM-DD easier to read.
+    function formatDate(dateText) {
+      const date = new Date(`${dateText}T00:00:00`);
+
+      return date.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric"
+      });
+    }
+
+    // This safely displays user text inside HTML.
+    function escapeHTML(text) {
+      return String(text)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+  </script>
+</body>
+</html>
