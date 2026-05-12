@@ -3,1015 +3,183 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>Daily Planner</title>
   <style>
-    /*
-      CSS controls the design only.
-      The app uses soft colors, rounded cards, and gentle shadows to stay modern
-      while still feeling simple and beginner-friendly.
-    */
-
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     :root {
-      --page-bg: #f5f6f1;
-      --page-bg-alt: #f5f6f1;
-      --card-bg: #fffefb;
-      --card-bg-soft: #fbfcf7;
-      --text-color: #1f241f;
-      --muted-text: #6b7569;
-      --heading-color: #1f241f;
-      --border-color: rgba(222, 228, 216, 0.95);
-      --input-bg: #fffefb;
-      --button-bg: #1f2a22;
+      --bg: #f5f6f1;
+      --card: #fffefb;
+      --soft: #f3f6ee;
+      --text: #20251f;
+      --muted: #687263;
+      --border: #dfe6d8;
+      --accent: #5f9467;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --button: #202b22;
       --button-text: #fffefb;
-      --button-hover: #31543d;
-      --soft-button-bg: #f0f3eb;
-      --soft-button-hover: #e4ebdf;
-      --accent: #7fa180;
-      --accent-strong: #2f8b4d;
-      --success-bg: #e1f5e3;
-      --success-border: #76bd7d;
-      --danger-bg: #fff2ef;
-      --danger-border: #dc8b7a;
-      --shadow: 0 16px 38px rgba(44, 54, 43, 0.06);
-      --shadow-strong: 0 18px 45px rgba(44, 54, 43, 0.08);
-      --radius-card: 18px;
-      --radius-inner: 12px;
-      --font-main: Inter, Arial, sans-serif;
-      --font-heading: Inter, Arial, sans-serif;
-      --progress-red: #ef4444;
-      --progress-yellow: #f59e0b;
-      --progress-green: #22c55e;
-    }
-
-    body[data-theme="minimal"] {
-      --page-bg: #f5f6f1;
-      --page-bg-alt: #edf1e8;
-      --card-bg: #fffefb;
-      --card-bg-soft: #fbfcf7;
-      --text-color: #1f241f;
-      --muted-text: #6b7569;
-      --heading-color: #1f241f;
-      --border-color: rgba(222, 228, 216, 0.95);
-      --button-bg: #1f2a22;
-      --button-hover: #31543d;
-      --soft-button-bg: #f0f3eb;
-      --soft-button-hover: #e4ebdf;
-      --accent: #7fa180;
-      --accent-strong: #2f8b4d;
-      --success-bg: #e1f5e3;
-      --success-border: #76bd7d;
+      --shadow: 0 18px 45px rgba(40, 48, 38, 0.08);
+      --radius: 18px;
+      --font: Inter, Arial, sans-serif;
     }
 
     body[data-theme="cyberborg"] {
-      --page-bg: #080b16;
-      --page-bg-alt: #111a36;
-      --card-bg: rgba(12, 18, 38, 0.78);
-      --card-bg-soft: rgba(18, 27, 54, 0.86);
-      --text-color: #e8fbff;
-      --muted-text: #9bb8d0;
-      --heading-color: #f5fdff;
-      --border-color: rgba(72, 224, 255, 0.28);
-      --input-bg: rgba(7, 12, 28, 0.72);
-      --button-bg: #00d9ff;
-      --button-text: #07101f;
-      --button-hover: #b34cff;
-      --soft-button-bg: rgba(31, 45, 84, 0.9);
-      --soft-button-hover: rgba(55, 74, 128, 0.95);
-      --accent: #00e5ff;
-      --accent-strong: #b45cff;
-      --success-bg: rgba(0, 255, 170, 0.13);
-      --success-border: rgba(0, 255, 170, 0.7);
-      --danger-bg: rgba(255, 72, 128, 0.12);
-      --danger-border: rgba(255, 72, 128, 0.65);
-      --shadow: 0 18px 45px rgba(0, 229, 255, 0.1);
-      --shadow-strong: 0 0 35px rgba(0, 229, 255, 0.18), 0 0 70px rgba(180, 92, 255, 0.12);
-      --progress-red: #ff4d7d;
-      --progress-yellow: #f9d84a;
-      --progress-green: #00ffaa;
+      --bg: #080c18; --card: rgba(14, 22, 44, 0.9); --soft: rgba(22, 34, 64, 0.95);
+      --text: #eaffff; --muted: #9fb8cf; --border: rgba(0, 217, 255, 0.28);
+      --accent: #00d9ff; --button: #00d9ff; --button-text: #08101d;
+      --shadow: 0 0 36px rgba(0, 217, 255, 0.16);
     }
 
     body[data-theme="picasso"] {
-      --page-bg: #f3ead9;
-      --page-bg-alt: #e9d3ad;
-      --card-bg: #fff8e9;
-      --card-bg-soft: #f8efd8;
-      --text-color: #272725;
-      --muted-text: #746f66;
-      --heading-color: #202331;
-      --border-color: rgba(52, 91, 128, 0.24);
-      --button-bg: #2f5f88;
-      --button-text: #fff8e9;
-      --button-hover: #c66b4e;
-      --soft-button-bg: #ecd7ab;
-      --soft-button-hover: #e2bf72;
-      --accent: #d8a733;
-      --accent-strong: #c66b4e;
-      --success-bg: #dcebbd;
-      --success-border: #7e9f69;
-      --danger-bg: #f3d7c9;
-      --danger-border: #c66b4e;
-      --radius-card: 24px;
-      --radius-inner: 16px;
+      --bg: #f3ead9; --card: #fff8e9; --soft: #f2ddb5; --text: #272725;
+      --muted: #746f66; --border: rgba(47, 95, 136, 0.28); --accent: #c66b4e; --button: #2f5f88;
     }
 
     body[data-theme="davinci"] {
-      --page-bg: #efe2c4;
-      --page-bg-alt: #d9c193;
-      --card-bg: #fbf0d1;
-      --card-bg-soft: #f3e3ba;
-      --text-color: #3b2b1d;
-      --muted-text: #7b6446;
-      --heading-color: #2b1d13;
-      --border-color: rgba(94, 68, 38, 0.28);
-      --button-bg: #6f4f25;
-      --button-text: #fff4d6;
-      --button-hover: #a7762b;
-      --soft-button-bg: #ead7aa;
-      --soft-button-hover: #dec287;
-      --accent: #b88832;
-      --accent-strong: #765321;
-      --success-bg: #e8e0b9;
-      --success-border: #9b8d4f;
-      --danger-bg: #ead0bb;
-      --danger-border: #a66b45;
-      --font-main: Georgia, "Times New Roman", serif;
-      --font-heading: Georgia, "Times New Roman", serif;
-      --radius-card: 14px;
+      --bg: #efe2c4; --card: #fbf0d1; --soft: #f1dfb1; --text: #3b2b1d;
+      --muted: #7b6446; --border: rgba(94, 68, 38, 0.3); --accent: #b88832; --button: #6f4f25;
+      --font: Georgia, "Times New Roman", serif;
     }
 
     body[data-theme="husnu"] {
-      --page-bg: #ecf7d6;
-      --page-bg-alt: #f9df6b;
-      --card-bg: #fffbea;
-      --card-bg-soft: #f2ffd9;
-      --text-color: #27391f;
-      --muted-text: #63724a;
-      --heading-color: #25391d;
-      --border-color: rgba(96, 143, 70, 0.28);
-      --button-bg: #4e8f38;
-      --button-text: #fffbea;
-      --button-hover: #f2bd2b;
-      --soft-button-bg: #e2f5b8;
-      --soft-button-hover: #f8df72;
-      --accent: #f1c232;
-      --accent-strong: #59a03f;
-      --success-bg: #e7f8ac;
-      --success-border: #71b84f;
-      --danger-bg: #fff1c2;
-      --danger-border: #d99b2a;
-      --radius-card: 24px;
-      --radius-inner: 18px;
-      --progress-red: #ef7a34;
-      --progress-yellow: #f6d84b;
-      --progress-green: #5fbf53;
+      --bg: #ecf7d6; --card: #fffbea; --soft: #effbcc; --text: #27391f;
+      --muted: #63724a; --border: rgba(96, 143, 70, 0.3); --accent: #f1c232; --button: #4e8f38;
+      --radius: 24px;
     }
 
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: var(--font-main);
-      background: radial-gradient(circle at top left, var(--page-bg-alt), transparent 34%), var(--page-bg);
-      color: var(--text-color);
-      transition: background 0.45s ease, color 0.35s ease;
+      font-family: var(--font);
+      background: radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 18%, transparent), transparent 32%), var(--bg);
+      color: var(--text);
+      transition: background 0.35s ease, color 0.35s ease;
     }
 
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      z-index: -1;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.45s ease;
+    .app { width: min(1240px, calc(100% - 40px)); margin: 0 auto; padding: 42px 0; }
+    .top-bar, .layout { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 24px; align-items: start; }
+    .top-bar { align-items: end; margin-bottom: 24px; }
+    .top-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .main-column, .side-column { display: grid; gap: 24px; }
+
+    h1, h2, h3, p { margin: 0; }
+    h1 { font-size: 40px; line-height: 1.05; }
+    body[data-theme="husnu"] h1::after { content: " 🍌"; }
+    h2 { font-size: 19px; margin-bottom: 16px; }
+    .subtitle, label, .muted { color: var(--muted); }
+    .subtitle { margin-top: 10px; }
+
+    label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 7px; }
+    input, textarea, button, select { font: inherit; }
+    input, textarea, select {
+      width: 100%; border: 1px solid var(--border); border-radius: 12px; background: var(--soft);
+      color: var(--text); padding: 12px 13px; outline: none;
     }
-
-    body[data-theme="cyberborg"]::before {
-      opacity: 0.45;
-      background: linear-gradient(120deg, transparent 0%, rgba(0, 229, 255, 0.16) 38%, rgba(180, 92, 255, 0.18) 68%, transparent 100%);
-      background-size: 220% 220%;
-      animation: themeDrift 12s ease-in-out infinite;
-    }
-
-    body[data-theme="picasso"]::before {
-      opacity: 0.38;
-      background:
-        radial-gradient(circle at 12% 22%, rgba(47, 95, 136, 0.22), transparent 18%),
-        radial-gradient(circle at 84% 12%, rgba(216, 167, 51, 0.28), transparent 17%),
-        radial-gradient(circle at 78% 78%, rgba(198, 107, 78, 0.22), transparent 22%);
-    }
-
-    body[data-theme="davinci"]::before {
-      opacity: 0.28;
-      background:
-        linear-gradient(rgba(82, 55, 27, 0.12) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(82, 55, 27, 0.08) 1px, transparent 1px);
-      background-size: 34px 34px;
-    }
-
-    body[data-theme="husnu"]::before {
-      opacity: 0.3;
-      background:
-        radial-gradient(circle at 16% 18%, rgba(241, 194, 50, 0.32), transparent 18%),
-        radial-gradient(circle at 82% 20%, rgba(89, 160, 63, 0.22), transparent 20%),
-        radial-gradient(circle at 66% 86%, rgba(241, 194, 50, 0.24), transparent 18%);
-    }
-
-    @keyframes themeDrift {
-      0% {
-        background-position: 0% 50%;
-      }
-
-      50% {
-        background-position: 100% 50%;
-      }
-
-      100% {
-        background-position: 0% 50%;
-      }
-    }
-
-    .app {
-      width: min(1240px, calc(100% - 40px));
-      margin: 0 auto;
-      padding: 42px 0;
-    }
-
-    .top-bar {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 24px;
-      align-items: end;
-      margin-bottom: 24px;
-    }
-
-    h1,
-    h2,
-    p {
-      margin: 0;
-    }
-
-    h1 {
-      font-size: 40px;
-      line-height: 1.05;
-      letter-spacing: 0;
-      color: var(--heading-color);
-      font-family: var(--font-heading);
-    }
-
-    h2 {
-      font-size: 19px;
-      margin-bottom: 18px;
-      color: var(--heading-color);
-      font-family: var(--font-heading);
-    }
-
-    .subtitle {
-      color: var(--muted-text);
-      margin-top: 10px;
-    }
-
-    label {
-      display: block;
-      color: var(--muted-text);
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    input,
-    textarea,
-    button {
-      font: inherit;
-    }
-
-    input,
-    textarea {
-      width: 100%;
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-inner);
-      background: var(--input-bg);
-      color: var(--text-color);
-      padding: 13px 14px;
-      outline: none;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-    }
-
-    input:focus,
-    textarea:focus {
-      border-color: var(--accent);
-      background: var(--input-bg);
-      box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent);
-    }
-
-    textarea {
-      resize: vertical;
-    }
+    input:focus, textarea:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 20%, transparent); }
 
     button {
-      border: 0;
-      border-radius: var(--radius-inner);
-      cursor: pointer;
-      font-weight: 700;
-      transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+      border: 0; border-radius: 12px; background: var(--button); color: var(--button-text);
+      cursor: pointer; font-weight: 700; padding: 12px 15px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+    button:hover { transform: translateY(-1px); box-shadow: 0 12px 24px color-mix(in srgb, var(--accent) 20%, transparent); }
+
+    .panel, .quote-card, .analytics-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+      box-shadow: var(--shadow); padding: 24px;
     }
 
-    button:hover {
-      transform: translateY(-1px);
-    }
+    .quote-card { position: relative; overflow: hidden; margin-bottom: 24px; }
+    .quote-card::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 5px; background: var(--accent); }
+    .quote-label { color: var(--muted); font-size: 13px; font-weight: 800; letter-spacing: 0.08em; margin-bottom: 12px; text-transform: uppercase; }
+    body[data-theme="husnu"] .quote-label::after { content: " 🐵"; }
+    .quote-text { font-size: 22px; font-style: italic; line-height: 1.5; }
+    .quote-author { color: var(--muted); margin-top: 12px; }
+    .quote-fade { animation: quoteFade 0.55s ease; }
+    @keyframes quoteFade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
-    button:active {
-      transform: translateY(0);
-    }
-
-    .date-field {
-      width: 210px;
-    }
-
-    .quote-card {
-      position: relative;
-      overflow: hidden;
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: calc(var(--radius-card) + 2px);
-      box-shadow: var(--shadow-strong);
-      padding: 26px 28px;
-      margin-bottom: 24px;
-    }
-
-    .quote-card::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 5px;
-      height: 100%;
-      background: var(--accent);
-    }
-
-    .quote-label {
-      color: var(--muted-text);
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      margin-bottom: 12px;
-      text-transform: uppercase;
-    }
-
-    .quote-text {
-      max-width: 900px;
-      color: var(--heading-color);
-      font-size: 23px;
-      font-style: italic;
-      line-height: 1.5;
-    }
-
-    .quote-author {
-      color: var(--muted-text);
-      font-size: 14px;
-      margin-top: 14px;
-    }
-
-    /*
-      JavaScript adds this class when the daily quote is displayed.
-      It creates a small fade so the quote feels smooth and elegant.
-    */
-    .quote-fade {
-      animation: quoteFade 0.55s ease;
-    }
-
-    @keyframes quoteFade {
-      from {
-        opacity: 0;
-        transform: translateY(6px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .layout {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 320px;
-      gap: 24px;
-      align-items: start;
-    }
-
-    .main-column,
-    .side-column {
-      display: grid;
-      gap: 24px;
-    }
-
-    .panel {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-card);
-      box-shadow: var(--shadow);
-      padding: 24px;
-      transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease, transform 0.25s ease;
-    }
-
-    .task-form {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
-    .add-button {
-      background: var(--button-bg);
-      color: var(--button-text);
-      padding: 13px 20px;
-      box-shadow: 0 10px 20px rgba(31, 42, 34, 0.14);
-    }
-
-    .add-button:hover {
-      background: var(--button-hover);
-      box-shadow: 0 14px 26px color-mix(in srgb, var(--accent) 25%, transparent);
-    }
-
-    .task-list,
-    .date-list {
-      display: grid;
-      gap: 14px;
-      max-height: 420px;
-      overflow: auto;
-      padding-right: 2px;
-    }
-
-    .planned-dates-summary {
-      color: var(--muted-text);
-      font-size: 14px;
-      margin-bottom: 14px;
-    }
-
-    .planned-dates-controls {
-      display: grid;
-      gap: 10px;
-    }
-
-    .planned-dates-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .planned-date-toggle,
-    .show-all-dates-button {
-      background: var(--soft-button-bg);
-      color: var(--text-color);
-      box-shadow: inset 0 0 0 1px var(--border-color);
-      padding: 10px 12px;
-    }
-
-    .planned-date-toggle:hover,
-    .show-all-dates-button:hover {
-      background: var(--soft-button-hover);
-    }
-
-    .planned-date-search {
-      padding: 11px 12px;
-    }
-
-    .empty-message {
-      border: 1px dashed var(--border-color);
-      border-radius: 14px;
-      background: var(--card-bg-soft);
-      color: var(--muted-text);
-      padding: 18px;
-      text-align: center;
-    }
-
+    .task-form { display: grid; grid-template-columns: 1fr auto; gap: 12px; margin-bottom: 18px; }
+    .task-list, .date-list, .analysis-task-list { display: grid; gap: 12px; }
     .task-card {
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-card);
-      background: var(--card-bg);
-      box-shadow: var(--shadow);
-      padding: 16px;
-      transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
-    }
-
-    .task-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 16px 32px rgba(44, 54, 43, 0.08);
-    }
-
-    /*
-      JavaScript adds "done" when the checkbox is clicked.
-      This keeps the original green completed-card behavior.
-    */
-    .task-card.done {
-      animation: completePulse 0.45s ease;
-      background: var(--success-bg);
-      border-color: var(--success-border);
-      box-shadow: 0 16px 32px color-mix(in srgb, var(--accent-strong) 22%, transparent);
-    }
-
-    .task-card.missed {
-      background: var(--danger-bg);
-      border-color: var(--danger-border);
-    }
-
-    @keyframes completePulse {
-      0% {
-        transform: scale(1);
-      }
-
-      45% {
-        transform: scale(1.02);
-      }
-
-      100% {
-        transform: scale(1);
-      }
-    }
-
-    .task-top {
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      gap: 12px;
-      align-items: center;
-    }
-
-    .complete-checkbox {
-      width: 22px;
-      height: 22px;
-      accent-color: var(--accent-strong);
-      cursor: pointer;
-    }
-
-    .task-title {
-      color: var(--heading-color);
-      font-weight: 700;
-      line-height: 1.35;
-      overflow-wrap: anywhere;
-    }
-
-    .task-actions {
-      display: flex;
-      gap: 8px;
-    }
-
-    .icon-button {
-      display: grid;
-      place-items: center;
-      width: 36px;
-      height: 36px;
-      background: var(--soft-button-bg);
-      color: var(--text-color);
-      box-shadow: inset 0 0 0 1px var(--border-color);
-      padding: 0;
-      font-size: 16px;
-      line-height: 1;
-    }
-
-    .icon-button:hover {
-      background: var(--soft-button-hover);
-      box-shadow: inset 0 0 0 1px var(--border-color), 0 8px 16px color-mix(in srgb, var(--accent) 18%, transparent);
-    }
-
-    .missed-button.active {
-      background: #c94f3d;
-      color: white;
-      box-shadow: 0 10px 20px rgba(201, 79, 61, 0.18);
-    }
-
-    .delete-button {
-      font-size: 14px;
-    }
-
-    .task-notes {
-      min-height: 76px;
-      margin-top: 14px;
-      background: var(--card-bg-soft);
-    }
-
-    .journal {
-      min-height: 260px;
-      background: var(--card-bg-soft);
-      line-height: 1.55;
-    }
-
-    .date-button {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 10px;
-      width: 100%;
-      border: 1px solid var(--border-color);
-      background: var(--card-bg-soft);
-      color: var(--text-color);
-      box-shadow: 0 8px 18px rgba(44, 54, 43, 0.035);
-      padding: 14px;
-      text-align: left;
-    }
-
-    .date-button:hover {
-      background: var(--soft-button-hover);
-      border-color: var(--accent);
-      box-shadow: 0 12px 24px rgba(44, 54, 43, 0.06);
-    }
-
-    .date-button.active {
-      background: var(--button-bg);
-      color: var(--button-text);
-      border-color: var(--button-bg);
-      box-shadow: 0 12px 24px rgba(31, 42, 34, 0.12);
-    }
-
-    .date-meta {
-      display: block;
-      color: inherit;
-      opacity: 0.72;
-      font-size: 13px;
-      margin-top: 3px;
-    }
-
-    .date-count {
-      align-self: center;
-      border-radius: 999px;
-      background: rgba(32, 37, 31, 0.1);
-      padding: 4px 8px;
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    .date-button.active .date-count {
-      background: rgba(255, 255, 255, 0.18);
-    }
-
-    .analytics-card {
-      background: var(--card-bg, #fffefb);
-      border-radius: 18px;
-      padding: 24px;
-      box-shadow: var(--shadow);
-      border: 1px solid var(--border-color, rgba(222, 228, 216, 0.95));
-    }
-
-    .analytics-description {
-      color: var(--muted-text, #666);
-      margin-bottom: 18px;
-      font-size: 14px;
-      line-height: 1.45;
-    }
-
-    .date-range-controls {
-      display: grid;
-      grid-template-columns: 1fr 1fr auto;
-      gap: 12px;
-      align-items: end;
-      margin-bottom: 16px;
-    }
-
-    .date-field {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .date-field label {
-      font-size: 13px;
-      color: var(--muted-text, #666);
-      margin-bottom: 0;
-    }
-
-    .date-field input {
-      padding: 11px;
-      border-radius: 10px;
-      border: 1px solid var(--border-color, #ddd);
-      background: var(--input-bg, #ffffff);
-      color: var(--text-color, #222);
-    }
-
-    #analyzeRangeBtn {
-      background: var(--button-bg);
-      color: var(--button-text);
-      padding: 12px 18px;
-      box-shadow: 0 10px 20px rgba(31, 42, 34, 0.14);
-    }
-
-    #analyzeRangeBtn:hover {
-      background: var(--button-hover);
-      box-shadow: 0 14px 26px rgba(49, 84, 61, 0.18);
-    }
-
-    .analytics-message {
-      margin: 10px 0;
-      min-height: 20px;
-      font-size: 14px;
-      color: var(--muted-text, #666);
-      line-height: 1.4;
-    }
-
-    .analytics-results {
-      margin-top: 16px;
-      display: grid;
-      gap: 8px;
-      font-size: 15px;
-    }
-
-    .analytics-results p {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      border-bottom: 1px solid var(--border-color);
-      padding-bottom: 8px;
-      color: var(--muted-text);
-    }
-
-    .analytics-results strong {
-      color: var(--heading-color);
-    }
-
-    .progress-label {
-      display: flex;
-      justify-content: space-between;
-      color: #495346;
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    .progress-track {
-      width: 100%;
-      height: 16px;
-      overflow: hidden;
-      border-radius: 999px;
-      background: #e5e7eb;
-      box-shadow: inset 0 1px 3px rgba(44, 54, 43, 0.08);
-      margin-top: 18px;
-    }
-
-    .progress-fill {
-      width: 0%;
-      height: 100%;
-      border-radius: inherit;
-      background: #ef4444;
-      transition: width 0.4s ease, background 0.4s ease;
-    }
-
-    .top-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-      align-items: end;
-      justify-content: end;
-    }
-
-    .theme-switcher {
-      width: 190px;
-    }
-
-    .theme-switcher select {
-      width: 100%;
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-inner);
-      background: var(--input-bg);
-      color: var(--text-color);
-      padding: 13px 14px;
-      outline: none;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .theme-switcher select:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent);
-    }
-
-    .theme-modal {
-      position: fixed;
-      inset: 0;
-      z-index: 20;
-      display: grid;
-      place-items: center;
-      background: rgba(15, 20, 18, 0.48);
-      padding: 22px;
-      backdrop-filter: blur(10px);
-    }
-
-    .theme-modal[hidden] {
-      display: none;
-    }
-
-    .theme-modal-card {
-      width: min(860px, 100%);
-      background: var(--card-bg);
-      color: var(--text-color);
-      border: 1px solid var(--border-color);
-      border-radius: 24px;
-      box-shadow: var(--shadow-strong);
-      padding: 28px;
-      animation: modalIn 0.35s ease;
-    }
-
-    .theme-modal-card h2 {
-      font-size: 30px;
-      margin-bottom: 8px;
-    }
-
-    .theme-modal-card p {
-      color: var(--muted-text);
-      line-height: 1.5;
-      margin-bottom: 20px;
-    }
-
-    .theme-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 12px;
-    }
-
-    .theme-choice {
-      display: grid;
-      gap: 10px;
-      min-height: 132px;
-      border: 1px solid var(--border-color);
-      border-radius: 18px;
-      background: var(--card-bg-soft);
-      color: var(--text-color);
-      padding: 14px;
-      text-align: left;
-    }
-
-    .theme-choice:hover {
-      transform: translateY(-3px) scale(1.01);
-      border-color: var(--accent);
-      box-shadow: var(--shadow);
-    }
-
-    .theme-preview {
-      height: 44px;
-      border-radius: 14px;
-      border: 1px solid rgba(255, 255, 255, 0.35);
-    }
-
-    .theme-choice strong {
-      color: var(--heading-color);
-    }
-
-    .theme-choice span {
-      color: var(--muted-text);
-      font-size: 13px;
-      line-height: 1.35;
-    }
-
-    .theme-preview.minimal {
-      background: linear-gradient(135deg, #fffefb 0%, #f0f3eb 55%, #7fa180 56%);
-    }
-
-    .theme-preview.cyberborg {
-      background: linear-gradient(135deg, #07101f 0%, #00d9ff 48%, #b34cff 100%);
-      box-shadow: 0 0 18px rgba(0, 217, 255, 0.45);
-    }
-
-    .theme-preview.picasso {
-      background: conic-gradient(from 25deg, #fff8e9, #2f5f88, #e2bf72, #c66b4e, #fff8e9);
-    }
-
-    .theme-preview.davinci {
-      background: linear-gradient(135deg, #fbf0d1 0%, #b88832 52%, #6f4f25 100%);
-    }
-
-    .theme-preview.husnu {
-      background: linear-gradient(135deg, #ecf7d6 0%, #f1c232 52%, #59a03f 100%);
-    }
-
-    body[data-theme="cyberborg"] .panel,
-    body[data-theme="cyberborg"] .analytics-card,
-    body[data-theme="cyberborg"] .quote-card,
-    body[data-theme="cyberborg"] .task-card {
-      backdrop-filter: blur(16px);
-      box-shadow: var(--shadow-strong);
-    }
-
-    body[data-theme="cyberborg"] .progress-track {
-      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.35), 0 0 18px rgba(0, 229, 255, 0.22);
-    }
-
-    body[data-theme="picasso"] .quote-card,
-    body[data-theme="picasso"] .panel,
-    body[data-theme="picasso"] .analytics-card {
-      border-radius: 26px 18px 30px 20px;
-    }
-
-    body[data-theme="picasso"] .quote-card::after {
-      content: "";
-      position: absolute;
-      right: -36px;
-      top: -28px;
-      width: 130px;
-      height: 130px;
-      border-radius: 38% 62% 45% 55%;
-      background: rgba(216, 167, 51, 0.22);
-    }
-
-    body[data-theme="davinci"] .panel,
-    body[data-theme="davinci"] .analytics-card,
-    body[data-theme="davinci"] .quote-card,
-    body[data-theme="davinci"] .task-card {
-      box-shadow: 0 12px 30px rgba(80, 52, 25, 0.12);
-      border-style: double;
-    }
-
-    body[data-theme="husnu"] h1::after {
-      content: " 🍌";
-    }
-
-    body[data-theme="husnu"] .quote-label::after {
-      content: " 🐵";
-    }
-
-    body[data-theme="husnu"] .task-card.done {
-      background: linear-gradient(135deg, #e7f8ac, #fff1a8);
-    }
-
-    @keyframes modalIn {
-      from {
-        opacity: 0;
-        transform: translateY(12px) scale(0.98);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-    }
+      background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.045); padding: 15px;
+      transition: transform 0.2s ease, background 0.25s ease, border-color 0.25s ease;
+    }
+    .task-card:hover { transform: translateY(-2px); }
+    .task-card.done { background: color-mix(in srgb, var(--success) 18%, var(--card)); border-color: var(--success); }
+    body[data-theme="husnu"] .task-card.done { background: linear-gradient(135deg, #e8f8af, #fff1a8); }
+    .task-card.missed { background: color-mix(in srgb, var(--danger) 12%, var(--card)); border-color: var(--danger); }
+    .task-top { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; }
+    .complete-checkbox { width: 22px; height: 22px; accent-color: var(--accent); }
+    .task-title { font-weight: 800; overflow-wrap: anywhere; }
+    .task-actions { display: flex; gap: 7px; }
+    .icon-button { width: 36px; height: 36px; padding: 0; background: var(--soft); color: var(--text); border: 1px solid var(--border); }
+    .missed-button.active { background: var(--danger); color: white; }
+    .task-notes { min-height: 74px; margin-top: 12px; }
+    .journal { min-height: 250px; line-height: 1.55; }
+
+    .analytics-description, .analytics-message, .planned-dates-summary { color: var(--muted); font-size: 14px; line-height: 1.45; margin-bottom: 14px; }
+    .date-range-controls { display: grid; grid-template-columns: 1fr 1fr auto; gap: 12px; align-items: end; }
+    .analytics-results { display: grid; gap: 8px; margin-top: 16px; }
+    .analytics-results p { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--border); padding-bottom: 8px; color: var(--muted); }
+    .analytics-results strong { color: var(--text); }
+    .progress-track { height: 18px; border-radius: 999px; background: #e5e7eb; overflow: hidden; margin: 18px 0; }
+    .progress-fill { height: 100%; width: 0%; border-radius: inherit; background: var(--danger); transition: width 0.4s ease, background 0.4s ease; }
+    .analysis-task-list { max-height: 260px; overflow: auto; margin-top: 14px; }
+    .analysis-task {
+      display: grid; gap: 4px; border: 1px solid var(--border); border-radius: 14px; background: var(--soft); padding: 12px;
+    }
+    .analysis-task.done { border-color: var(--success); }
+    .analysis-task.failed { border-color: var(--danger); }
+    .status-done { color: var(--success); font-weight: 800; }
+    .status-failed { color: var(--danger); font-weight: 800; }
+    .analysis-task-meta { color: var(--muted); font-size: 13px; }
+
+    .planned-dates-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+    .planned-date-toggle, .show-all-dates-button, .date-button { background: var(--soft); color: var(--text); border: 1px solid var(--border); }
+    .planned-date-search { margin-bottom: 12px; }
+    .date-list { max-height: 320px; overflow: auto; }
+    .date-button { display: grid; grid-template-columns: 1fr auto; gap: 10px; width: 100%; text-align: left; }
+    .date-button.active { background: var(--button); color: var(--button-text); }
+    .date-meta { display: block; opacity: 0.72; font-size: 13px; margin-top: 3px; }
+    .date-count { border-radius: 999px; background: color-mix(in srgb, var(--accent) 18%, transparent); padding: 4px 8px; font-size: 12px; }
+    .empty-message { border: 1px dashed var(--border); border-radius: 14px; background: var(--soft); color: var(--muted); padding: 16px; text-align: center; }
+
+    .theme-modal { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; padding: 22px; background: rgba(15, 20, 18, 0.5); backdrop-filter: blur(10px); }
+    .theme-modal[hidden] { display: none; }
+    .theme-modal-card { width: min(860px, 100%); }
+    .theme-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 20px; }
+    .theme-choice { display: grid; gap: 9px; min-height: 132px; background: var(--soft); color: var(--text); border: 1px solid var(--border); text-align: left; }
+    .theme-preview { height: 42px; border-radius: 14px; }
+    .theme-preview.minimal { background: linear-gradient(135deg, #fff, #eef2e9, #7fa180); }
+    .theme-preview.cyberborg { background: linear-gradient(135deg, #07101f, #00d9ff, #b34cff); }
+    .theme-preview.picasso { background: conic-gradient(#fff8e9, #2f5f88, #e2bf72, #c66b4e, #fff8e9); }
+    .theme-preview.davinci { background: linear-gradient(135deg, #fbf0d1, #b88832, #6f4f25); }
+    .theme-preview.husnu { background: linear-gradient(135deg, #ecf7d6, #f1c232, #59a03f); }
 
     @media (max-width: 860px) {
-      .top-bar,
-      .layout,
-      .task-form {
-        grid-template-columns: 1fr;
-      }
-
-      .date-range-controls {
-        grid-template-columns: 1fr;
-      }
-
-      .date-list {
-        max-height: 280px;
-      }
-
-      .date-field {
-        width: 100%;
-      }
-
-      .top-actions,
-      .theme-switcher {
-        width: 100%;
-      }
-
-      .theme-grid {
-        grid-template-columns: 1fr;
-      }
-
-      h1 {
-        font-size: 30px;
-      }
+      .top-bar, .layout, .top-actions, .task-form, .date-range-controls, .theme-grid { grid-template-columns: 1fr; }
+      h1 { font-size: 30px; }
+      .date-list, .analysis-task-list { max-height: 240px; }
     }
   </style>
 </head>
 <body>
   <div class="theme-modal" id="themeModal" hidden>
-    <section class="theme-modal-card" aria-labelledby="themeModalTitle">
+    <section class="panel theme-modal-card" aria-labelledby="themeModalTitle">
       <h2 id="themeModalTitle">Choose Your Theme</h2>
-      <p>Pick a visual style for your planner. Your choice is saved in this browser and you can change it anytime from the top bar.</p>
-
+      <p class="muted">Pick a visual style. Your choice is saved, and you can change it anytime.</p>
       <div class="theme-grid">
-        <button class="theme-choice" type="button" data-theme-choice="minimal">
-          <span class="theme-preview minimal"></span>
-          <strong>Minimal</strong>
-          <span>Clean, calm, and focused.</span>
-        </button>
-
-        <button class="theme-choice" type="button" data-theme-choice="cyberborg">
-          <span class="theme-preview cyberborg"></span>
-          <strong>Cyberborg</strong>
-          <span>AI operating system glow.</span>
-        </button>
-
-        <button class="theme-choice" type="button" data-theme-choice="picasso">
-          <span class="theme-preview picasso"></span>
-          <strong>Picasso</strong>
-          <span>Modern art museum energy.</span>
-        </button>
-
-        <button class="theme-choice" type="button" data-theme-choice="davinci">
-          <span class="theme-preview davinci"></span>
-          <strong>Da Vinci</strong>
-          <span>Renaissance notebook warmth.</span>
-        </button>
-
-        <button class="theme-choice" type="button" data-theme-choice="husnu">
-          <span class="theme-preview husnu"></span>
-          <strong>Hüsnü</strong>
-          <span>Tropical, playful, productive.</span>
-        </button>
+        <button class="theme-choice" type="button" data-theme-choice="minimal"><span class="theme-preview minimal"></span><strong>Minimal</strong><span>Clean and calm.</span></button>
+        <button class="theme-choice" type="button" data-theme-choice="cyberborg"><span class="theme-preview cyberborg"></span><strong>Cyberborg</strong><span>AI system glow.</span></button>
+        <button class="theme-choice" type="button" data-theme-choice="picasso"><span class="theme-preview picasso"></span><strong>Picasso</strong><span>Art museum energy.</span></button>
+        <button class="theme-choice" type="button" data-theme-choice="davinci"><span class="theme-preview davinci"></span><strong>Da Vinci</strong><span>Notebook warmth.</span></button>
+        <button class="theme-choice" type="button" data-theme-choice="husnu"><span class="theme-preview husnu"></span><strong>Hüsnü</strong><span>Tropical productivity.</span></button>
       </div>
     </section>
   </div>
@@ -1022,9 +190,8 @@
         <h1>Daily Planner</h1>
         <p class="subtitle">Plan one day at a time, then come back tomorrow.</p>
       </div>
-
       <div class="top-actions">
-        <div class="theme-switcher">
+        <div>
           <label for="themeSelect">Theme</label>
           <select id="themeSelect">
             <option value="minimal">Minimal</option>
@@ -1034,8 +201,7 @@
             <option value="husnu">Hüsnü</option>
           </select>
         </div>
-
-        <div class="date-field">
+        <div>
           <label for="plannerDate">Current day</label>
           <input id="plannerDate" type="date" required>
         </div>
@@ -1052,12 +218,10 @@
       <div class="main-column">
         <section class="panel">
           <h2>Tasks</h2>
-
           <form class="task-form" id="taskForm">
             <input id="taskInput" type="text" placeholder="Add a task" autocomplete="off" required>
             <button class="add-button" type="submit">Add</button>
           </form>
-
           <div class="task-list" id="taskList"></div>
         </section>
 
@@ -1070,50 +234,34 @@
 
       <aside class="side-column">
         <section class="analytics-card">
-          <h2>Analytics</h2>
-          <p class="analytics-description">
-            Select a date range to analyze your task completion rate.
-          </p>
-
+          <h2>Analysis</h2>
+          <p class="analytics-description">Select a date range. Only tasks created inside that range are included.</p>
           <div class="date-range-controls">
-            <div class="date-field">
-              <label for="analyticsStartDate">Start date</label>
-              <input type="date" id="analyticsStartDate">
-            </div>
-
-            <div class="date-field">
-              <label for="analyticsEndDate">End date</label>
-              <input type="date" id="analyticsEndDate">
-            </div>
-
+            <div><label for="analyticsStartDate">Start date</label><input type="date" id="analyticsStartDate"></div>
+            <div><label for="analyticsEndDate">End date</label><input type="date" id="analyticsEndDate"></div>
             <button id="analyzeRangeBtn" type="button">Analyze</button>
           </div>
-
           <p class="analytics-message" id="analyticsMessage"></p>
-
           <div class="analytics-results">
             <p><strong>Selected range:</strong> <span id="selectedRangeText">No range selected</span></p>
             <p><strong>Total tasks:</strong> <span id="totalTasksText">0</span></p>
             <p><strong>Completed tasks:</strong> <span id="completedTasksText">0</span></p>
-            <p><strong>Incomplete tasks:</strong> <span id="incompleteTasksText">0</span></p>
+            <p><strong>Failed / not completed:</strong> <span id="incompleteTasksText">0</span></p>
             <p><strong>Success rate:</strong> <span id="successRateText">0%</span></p>
           </div>
-
-          <div class="progress-track" aria-label="Success rate progress">
-            <div id="successProgressFill" class="progress-fill"></div>
-          </div>
+          <div class="progress-track" aria-label="Success rate progress"><div id="successProgressFill" class="progress-fill"></div></div>
+          <h3>Tasks in selected range</h3>
+          <div class="analysis-task-list" id="analysisTaskList"></div>
         </section>
 
         <section class="panel">
           <h2>Planned dates</h2>
           <p class="planned-dates-summary" id="plannedDatesSummary">Planned Dates: 0 days recorded</p>
-          <div class="planned-dates-controls">
-            <div class="planned-dates-actions">
-              <button class="planned-date-toggle" id="togglePlannedDatesButton" type="button">Show planned dates</button>
-              <button class="show-all-dates-button" id="showAllDatesButton" type="button" hidden>Show all</button>
-            </div>
-            <input class="planned-date-search" id="plannedDateSearch" type="search" placeholder="Search dates, like 2026-05" hidden>
+          <div class="planned-dates-actions">
+            <button class="planned-date-toggle" id="togglePlannedDatesButton" type="button">Show planned dates</button>
+            <button class="show-all-dates-button" id="showAllDatesButton" type="button" hidden>Show all</button>
           </div>
+          <input class="planned-date-search" id="plannedDateSearch" type="search" placeholder="Search dates, like 2026-05" hidden>
           <div class="date-list" id="dateList"></div>
         </section>
       </aside>
@@ -1121,13 +269,32 @@
   </main>
 
   <script>
-    /*
-      JavaScript controls what the app does.
-      All planner data is saved in localStorage, so tasks, notes, journal,
-      daily quote behavior, planned dates, and analytics survive refreshes.
-    */
+    const APP_VERSION = "2.0.1";
+    const storageKey = "simpleDailyPlanner";
+    const flatTasksStorageKey = "tasks";
+    const themeStorageKey = "selectedTheme";
 
-    // These connect JavaScript to the HTML elements.
+    function runAppVersionMigration() {
+      const savedVersion = localStorage.getItem("appVersion");
+      const savedTheme = localStorage.getItem(themeStorageKey);
+
+      if (savedVersion !== APP_VERSION) {
+        localStorage.removeItem(flatTasksStorageKey);
+        localStorage.removeItem("journal");
+        localStorage.removeItem("plannedDates");
+        localStorage.removeItem("analyticsData");
+        localStorage.removeItem(storageKey);
+
+        if (savedTheme) {
+          localStorage.setItem(themeStorageKey, savedTheme);
+        }
+
+        localStorage.setItem("appVersion", APP_VERSION);
+      }
+    }
+
+    runAppVersionMigration();
+
     const themeModal = document.querySelector("#themeModal");
     const themeSelect = document.querySelector("#themeSelect");
     const themeChoiceButtons = document.querySelectorAll("[data-theme-choice]");
@@ -1153,169 +320,42 @@
     const incompleteTasksText = document.querySelector("#incompleteTasksText");
     const successRateText = document.querySelector("#successRateText");
     const successProgressFill = document.querySelector("#successProgressFill");
+    const analysisTaskList = document.querySelector("#analysisTaskList");
 
-    // This is the name used to save the planner in localStorage.
-    const storageKey = "simpleDailyPlanner";
-    const themeStorageKey = "selectedTheme";
-    let plannedDatesExpanded = false;
-    let showingAllPlannedDates = false;
-
-    // Each quote has text and an author.
     const quotes = [
       { text: "He who has a why to live can bear almost any how.", author: "Friedrich Nietzsche" },
       { text: "The obstacle is the way.", author: "Marcus Aurelius" },
-      { text: "Waste no more time arguing what a good man should be. Be one.", author: "Marcus Aurelius" },
       { text: "Discipline equals freedom.", author: "Jocko Willink" },
-      { text: "You do not rise to the level of your goals. You fall to the level of your systems.", author: "James Clear" },
       { text: "The future depends on what you do today.", author: "Mahatma Gandhi" },
-      { text: "Success is the sum of small efforts repeated day in and day out.", author: "Robert Collier" },
-      { text: "If you're going through hell, keep going.", author: "Winston Churchill" },
-      { text: "The man who moves a mountain begins by carrying away small stones.", author: "Confucius" },
-      { text: "Dreams without goals remain dreams.", author: "Denzel Washington" },
-      { text: "A year from now you may wish you had started today.", author: "Karen Lamb" },
-      { text: "The best investment you can make is in yourself.", author: "Warren Buffett" },
-      { text: "What we think, we become.", author: "Buddha" },
-      { text: "Knowing yourself is the beginning of all wisdom.", author: "Aristotle" },
-      { text: "It always seems impossible until it is done.", author: "Nelson Mandela" },
       { text: "Without struggle, there is no progress.", author: "Frederick Douglass" },
       { text: "The successful warrior is the average man with laser-like focus.", author: "Bruce Lee" },
-      { text: "Action is the foundational key to all success.", author: "Pablo Picasso" },
-      { text: "Do not pray for an easy life. Pray for the strength to endure a difficult one.", author: "Bruce Lee" },
-      { text: "Your life does not get better by chance. It gets better by change.", author: "Jim Rohn" },
-      { text: "The pain of discipline is far less than the pain of regret.", author: "Sarah Bombell" },
-      { text: "Do what you can, with what you have, where you are.", author: "Theodore Roosevelt" },
-      { text: "Every moment is a fresh beginning.", author: "T. S. Eliot" },
-      { text: "Nothing will work unless you do.", author: "Maya Angelou" },
-      { text: "Success is never owned. It is rented, and the rent is due every day.", author: "Rory Vaden" },
-      { text: "Comfort is the enemy of progress.", author: "P. T. Barnum" },
-      { text: "Fall seven times and stand up eight.", author: "Japanese Proverb" },
-      { text: "A goal without a plan is only a wish.", author: "Antoine de Saint-Exupéry" },
-      { text: "Stay hungry. Stay foolish.", author: "Steve Jobs" },
-      { text: "The way to get started is to quit talking and begin doing.", author: "Walt Disney" },
-      { text: "Great things are done by a series of small things brought together.", author: "Vincent van Gogh" },
-      { text: "Doubt kills more dreams than failure ever will.", author: "Suzy Kassem" },
-      { text: "The disciplined are free.", author: "Eliud Kipchoge" },
-      { text: "Pressure creates strength.", author: "Billie Jean King" },
-      { text: "The harder the battle, the sweeter the victory.", author: "Les Brown" },
-      { text: "Your future is hidden in your daily routine.", author: "Mike Murdock" },
-      { text: "The secret of getting ahead is getting started.", author: "Mark Twain" },
-      { text: "Energy and persistence conquer all things.", author: "Benjamin Franklin" },
-      { text: "Persistence guarantees that results are inevitable.", author: "Paramahansa Yogananda" },
-      { text: "Do not fear failure but rather fear not trying.", author: "Roy T. Bennett" },
-      { text: "The price of greatness is responsibility.", author: "Winston Churchill" },
-      { text: "Mental toughness is doing the right thing for the team when it is not the best thing for you.", author: "Bill Belichick" },
-      { text: "A disciplined mind leads to happiness.", author: "Buddha" },
-      { text: "Master yourself and you master your future.", author: "Lao Tzu" },
-      { text: "What you do today can improve all your tomorrows.", author: "Ralph Marston" },
-      { text: "Self-control is strength. Calmness is mastery.", author: "James Allen" },
-      { text: "The strongest people are forged by adversity.", author: "Seneca" },
-      { text: "The only way out is through.", author: "Robert Frost" },
-      { text: "The quieter you become, the more you can hear.", author: "Ram Dass" },
-      { text: "You become what you give your attention to.", author: "Epictetus" },
-    
-      { text: "The happiness of your life depends upon the quality of your thoughts.", author: "Marcus Aurelius" },
-      { text: "No pressure, no diamonds.", author: "Thomas Carlyle" },
-      { text: "The soul becomes dyed with the color of its thoughts.", author: "Marcus Aurelius" },
-      { text: "First say to yourself what you would be; and then do what you have to do.", author: "Epictetus" },
-      { text: "Luck is what happens when preparation meets opportunity.", author: "Seneca" },
-      { text: "What stands in the way becomes the way.", author: "Marcus Aurelius" },
-      { text: "We suffer more often in imagination than in reality.", author: "Seneca" },
-      { text: "Do every act of your life as though it were the very last act of your life.", author: "Marcus Aurelius" },
-      { text: "A gem cannot be polished without friction, nor a man perfected without trials.", author: "Seneca" },
-      { text: "The greater the difficulty, the more glory in surmounting it.", author: "Epicurus" },
-      { text: "Man conquers the world by conquering himself.", author: "Zeno of Citium" },
-      { text: "You have power over your mind—not outside events.", author: "Marcus Aurelius" },
-      { text: "Do not spoil what you have by desiring what you have not.", author: "Epicurus" },
-      { text: "No man is free who is not master of himself.", author: "Epictetus" },
-      { text: "The more we value things outside our control, the less control we have.", author: "Epictetus" },
-      { text: "Difficulties show a person's character.", author: "Epictetus" },
-      { text: "To bear trials with a calm mind robs misfortune of its strength.", author: "Seneca" },
-      { text: "The key is to keep company only with people who uplift you.", author: "Epictetus" },
-      { text: "It is not because things are difficult that we do not dare.", author: "Seneca" },
-      { text: "How long are you going to wait before you demand the best for yourself?", author: "Epictetus" },
-    
-      { text: "The successful person has the habit of doing the things failures do not like to do.", author: "E. M. Gray" },
-      { text: "Success seems to be connected with action.", author: "Conrad Hilton" },
-      { text: "If you want to be tough, do tough things.", author: "Mike Tyson" },
-      { text: "Champions keep playing until they get it right.", author: "Billie Jean King" },
-      { text: "Hard work beats talent when talent does not work hard.", author: "Tim Notke" },
-      { text: "The difference between ordinary and extraordinary is that little extra.", author: "Jimmy Johnson" },
-      { text: "Greatness requires sacrifice.", author: "Kareem Abdul-Jabbar" },
-      { text: "The will to win means nothing without the will to prepare.", author: "Juma Ikangaa" },
-      { text: "You miss one hundred percent of the shots you do not take.", author: "Wayne Gretzky" },
-      { text: "Success is where preparation and opportunity meet.", author: "Bobby Unser" },
-    
-      { text: "Do not wait to strike till the iron is hot; but make it hot by striking.", author: "William Butler Yeats" },
-      { text: "The only limit to our realization of tomorrow is our doubts of today.", author: "Franklin D. Roosevelt" },
-      { text: "Everything you have ever wanted is sitting on the other side of fear.", author: "George Addair" },
-      { text: "You become unstoppable when you work on things people cannot take away from you.", author: "Naval Ravikant" },
-      { text: "The person who says it cannot be done should not interrupt the person doing it.", author: "Chinese Proverb" },
-      { text: "Do hard things regularly.", author: "Alex Hormozi" },
-      { text: "Your consistency creates your identity.", author: "James Clear" },
-      { text: "The comeback is always stronger than the setback.", author: "Unknown Comeback Saying" },
-      { text: "One day or day one. You decide.", author: "Paulo Coelho" },
-      { text: "Nothing changes if nothing changes.", author: "Courtney C. Stevens" },
-    
-      { text: "To suffer terribly and to know yourself as the cause: that is hell.", author: "C. S. Lewis" },
-      { text: "Becoming is better than being.", author: "Carol Dweck" },
-      { text: "Every master was once a beginner.", author: "Robin Sharma" },
-      { text: "A person who never made a mistake never tried anything new.", author: "Albert Einstein" },
-      { text: "Life is very interesting. In the end, some of your greatest pains become your greatest strengths.", author: "Drew Barrymore" },
-      { text: "Do not judge me by my successes, judge me by how many times I fell down and got back up again.", author: "Nelson Mandela" },
-      { text: "The only journey is the one within.", author: "Rainer Maria Rilke" },
-      { text: "He who conquers himself is the mightiest warrior.", author: "Confucius" },
-      { text: "A man who suffers before it is necessary suffers more than is necessary.", author: "Seneca" },
-      { text: "The more difficult the victory, the greater the happiness in winning.", author: "Pelé" },
-    
-      { text: "We are what we repeatedly do. Excellence, then, is not an act but a habit.", author: "Will Durant" },
-      { text: "Winning means you are willing to go longer, work harder, and give more than anyone else.", author: "Vince Lombardi" },
-      { text: "Success demands singleness of purpose.", author: "Vince Lombardi" },
-      { text: "You cannot have a positive life and a negative mind.", author: "Joyce Meyer" },
-      { text: "Pressure is a privilege.", author: "Billie Jean King" },
-      { text: "Today I will do what others will not, so tomorrow I can accomplish what others cannot.", author: "Jerry Rice" },
-      { text: "Train your mind to stay calm under pressure.", author: "Ryan Holiday" },
-      { text: "The person you will be in five years depends on what you do today.", author: "Jim Rohn" },
-      { text: "Your habits determine your future.", author: "Jack Canfield" },
-      { text: "Win the day.", author: "Marcus Aurelius" }
+      { text: "A disciplined mind leads to happiness.", author: "Buddha" }
     ];
 
-    /*
-      plannerData is an object. Each date has its own tasks and journal.
-      New tasks store both the newer properties the analytics needs
-      and the older properties the existing planner already used.
-    */
+    let plannedDatesExpanded = false;
+    let showingAllPlannedDates = false;
     let plannerData = loadPlannerData();
 
-    // Start the theme system before drawing the planner.
     initializeTheme();
-
-    // Start on today's date, then draw the page.
-    plannerDate.value = getToday();
+    plannerDate.value = getLocalDateString();
     fixOldTasksWithoutDates();
     showSelectedDay();
     showQuote();
     setDefaultAnalyticsDates();
 
-    // Add a task when the user submits the form.
     taskForm.addEventListener("submit", function (event) {
       event.preventDefault();
+      const title = taskInput.value.trim();
+      if (title === "") return;
 
-      const taskText = taskInput.value.trim();
-
-      if (taskText === "") {
-        return;
-      }
-
-      const day = getSelectedDay();
-
-      day.tasks.push({
+      getSelectedDay().tasks.push({
         id: Date.now(),
-        title: taskText,
-        text: taskText,
+        title,
+        text: title,
         completed: false,
         status: "open",
         notes: "",
-        createdAt: getLocalDateString()
+        createdAt: plannerDate.value || getLocalDateString()
       });
 
       taskInput.value = "";
@@ -1325,46 +365,30 @@
       updateAnalyticsForRange(analyticsStartDate.value, analyticsEndDate.value);
     });
 
-    // Changing the date shows a different day's tasks and journal.
     plannerDate.addEventListener("change", showSelectedDay);
-
-    // Save the journal every time the user types.
     journalInput.addEventListener("input", function () {
-      const day = getSelectedDay();
-      day.journal = journalInput.value;
+      getSelectedDay().journal = journalInput.value;
       savePlannerData();
       renderDates();
     });
-
-    // The Analyze button reads the selected dates and updates the results.
     analyzeRangeBtn.addEventListener("click", function () {
       updateAnalyticsForRange(analyticsStartDate.value, analyticsEndDate.value);
     });
-
-    // Planned dates are collapsed by default so the side panel stays compact.
     togglePlannedDatesButton.addEventListener("click", function () {
       plannedDatesExpanded = !plannedDatesExpanded;
       renderDates();
     });
-
-    // Show all dates only when the user asks for the full list.
     showAllDatesButton.addEventListener("click", function () {
       showingAllPlannedDates = !showingAllPlannedDates;
       renderDates();
     });
-
-    // Search only changes what is displayed. It does not change localStorage.
     plannedDateSearch.addEventListener("input", function () {
       showingAllPlannedDates = false;
       renderDates();
     });
-
-    // Change the theme from the top menu without touching planner data.
     themeSelect.addEventListener("change", function () {
       applyTheme(themeSelect.value, true);
     });
-
-    // First-time theme choices come from the welcome modal.
     themeChoiceButtons.forEach(function (button) {
       button.addEventListener("click", function () {
         applyTheme(button.dataset.themeChoice, true);
@@ -1372,133 +396,83 @@
       });
     });
 
-    // Load the saved theme. If there is no saved theme, show the welcome modal.
     function initializeTheme() {
       const savedTheme = localStorage.getItem(themeStorageKey);
       const validThemes = ["minimal", "cyberborg", "picasso", "davinci", "husnu"];
-      const hasSavedTheme = validThemes.includes(savedTheme);
-      const startingTheme = hasSavedTheme ? savedTheme : "minimal";
-
-      applyTheme(startingTheme, false);
-      themeModal.hidden = hasSavedTheme;
+      const theme = validThemes.includes(savedTheme) ? savedTheme : "minimal";
+      applyTheme(theme, false);
+      themeModal.hidden = savedTheme !== null;
     }
 
-    // Apply a theme by writing it to body[data-theme].
     function applyTheme(themeName, shouldSave) {
       document.body.dataset.theme = themeName;
       themeSelect.value = themeName;
-
-      if (shouldSave) {
-        localStorage.setItem(themeStorageKey, themeName);
-      }
-
+      if (shouldSave) localStorage.setItem(themeStorageKey, themeName);
       if (analyticsStartDate.value && analyticsEndDate.value) {
         updateAnalyticsForRange(analyticsStartDate.value, analyticsEndDate.value);
       }
     }
 
-    // Load saved planner data from localStorage.
     function loadPlannerData() {
       const savedData = localStorage.getItem(storageKey);
-
-      if (savedData === null) {
-        return {};
-      }
-
-      try {
-        return JSON.parse(savedData);
-      } catch (error) {
-        return {};
-      }
+      if (savedData === null) return {};
+      try { return JSON.parse(savedData); } catch (error) { return {}; }
     }
 
-    // Save plannerData in the browser.
     function savePlannerData() {
       localStorage.setItem(storageKey, JSON.stringify(plannerData));
+      localStorage.setItem(flatTasksStorageKey, JSON.stringify(getAllTasks()));
     }
 
-    // Get a local date string in YYYY-MM-DD format. This avoids UTC date bugs.
     function getLocalDateString(date = new Date()) {
       const year = date.getFullYear();
       const month = String(date.getMonth() + 1).padStart(2, "0");
       const day = String(date.getDate()).padStart(2, "0");
-
       return `${year}-${month}-${day}`;
     }
 
-    // Keep this small wrapper so the rest of the planner code stays familiar.
-    function getToday() {
-      return getLocalDateString();
+    function parseDateAtStart(dateString) {
+      const date = new Date(`${dateString}T00:00:00`);
+      date.setHours(0, 0, 0, 0);
+      return date;
     }
 
-    // Turn YYYY-MM-DD into a local Date object at midnight.
-    function parseLocalDate(dateString) {
-      return new Date(`${dateString}T00:00:00`);
+    function parseDateAtEnd(dateString) {
+      const date = new Date(`${dateString}T00:00:00`);
+      date.setHours(23, 59, 59, 999);
+      return date;
     }
 
-    // Get the selected date's data. Create it if it does not exist yet.
     function getSelectedDay() {
       const date = plannerDate.value;
-
-      if (!plannerData[date]) {
-        plannerData[date] = {
-          tasks: [],
-          journal: ""
-        };
-      }
-
+      if (!plannerData[date]) plannerData[date] = { tasks: [], journal: "" };
       return plannerData[date];
     }
 
-    // Update every saved task so old localStorage data keeps working.
     function fixOldTasksWithoutDates() {
+      let changed = false;
       Object.keys(plannerData).forEach(function (date) {
         const day = plannerData[date];
-
-        if (!day.tasks) {
-          day.tasks = [];
-        }
-
-        day.tasks.forEach(function (task) {
-          updateOldTask(task);
+        if (!day.tasks) day.tasks = [];
+        day.tasks = day.tasks.map(function (task) {
+          const fixedTask = {
+            ...task,
+            title: task.title || task.text || "Untitled task",
+            text: task.text || task.title || "Untitled task",
+            completed: task.completed === undefined ? task.done === true || task.status === "done" : task.completed,
+            status: task.status || (task.completed ? "done" : "open"),
+            notes: task.notes || "",
+            createdAt: task.createdAt || date || getLocalDateString()
+          };
+          if (!task.createdAt) changed = true;
+          return fixedTask;
         });
       });
-
-      savePlannerData();
+      if (changed) savePlannerData();
     }
 
-    // Older tasks may have text/status/done but not title/completed/createdAt.
-    function updateOldTask(task) {
-      if (!task.title) {
-        task.title = task.text || "Untitled task";
-      }
-
-      if (!task.text) {
-        task.text = task.title;
-      }
-
-      if (task.completed === undefined) {
-        task.completed = task.done === true || task.status === "done";
-      }
-
-      if (!task.status) {
-        task.status = task.completed ? "done" : "open";
-      }
-
-      if (!task.notes) {
-        task.notes = "";
-      }
-
-      // Old saved tasks get today's date so analytics never breaks.
-      if (!task.createdAt) {
-        task.createdAt = getLocalDateString();
-      }
-    }
-
-    // Show everything for the selected day.
     function showSelectedDay() {
       const day = getSelectedDay();
-      day.tasks.forEach(updateOldTask);
       journalInput.value = day.journal || "";
       renderTasks();
       renderDates();
@@ -1506,51 +480,38 @@
       savePlannerData();
     }
 
-    // Draw all task cards for the selected day.
     function renderTasks() {
       const day = getSelectedDay();
       taskList.innerHTML = "";
-
       if (day.tasks.length === 0) {
         taskList.innerHTML = '<div class="empty-message">No tasks yet.</div>';
         return;
       }
 
       day.tasks.forEach(function (task) {
-        updateOldTask(task);
-
-        const taskCard = document.createElement("article");
-        taskCard.className = `task-card ${task.completed ? "done" : task.status}`;
-
-        taskCard.innerHTML = `
+        const card = document.createElement("article");
+        card.className = `task-card ${task.completed ? "done" : task.status}`;
+        card.innerHTML = `
           <div class="task-top">
             <input class="complete-checkbox" type="checkbox" ${task.completed ? "checked" : ""} aria-label="Mark task complete">
             <div class="task-title">${escapeHTML(task.title)}</div>
             <div class="task-actions">
-              <button class="icon-button missed-button ${task.status === "missed" ? "active" : ""}" type="button" aria-label="Mark task missed" title="Mark missed">X</button>
-              <button class="icon-button delete-button" type="button" aria-label="Delete task" title="Delete">Del</button>
+              <button class="icon-button missed-button ${task.status === "missed" ? "active" : ""}" type="button" aria-label="Mark task missed">X</button>
+              <button class="icon-button delete-button" type="button" aria-label="Delete task">Del</button>
             </div>
           </div>
           <textarea class="task-notes" placeholder="Task notes...">${escapeHTML(task.notes)}</textarea>
         `;
 
-        const checkbox = taskCard.querySelector(".complete-checkbox");
-        const missedButton = taskCard.querySelector(".missed-button");
-        const notes = taskCard.querySelector(".task-notes");
-        const deleteButton = taskCard.querySelector(".delete-button");
-
-        // The checkbox marks the task as done and turns the card green.
-        checkbox.addEventListener("change", function () {
-          task.completed = checkbox.checked;
-          task.status = checkbox.checked ? "done" : "open";
+        card.querySelector(".complete-checkbox").addEventListener("change", function (event) {
+          task.completed = event.target.checked;
+          task.status = task.completed ? "done" : "open";
           savePlannerData();
           renderTasks();
           renderDates();
           updateAnalyticsForRange(analyticsStartDate.value, analyticsEndDate.value);
         });
-
-        // The X button marks a task that could not be completed.
-        missedButton.addEventListener("click", function () {
+        card.querySelector(".missed-button").addEventListener("click", function () {
           task.completed = false;
           task.status = task.status === "missed" ? "open" : "missed";
           savePlannerData();
@@ -1558,38 +519,25 @@
           renderDates();
           updateAnalyticsForRange(analyticsStartDate.value, analyticsEndDate.value);
         });
-
-        // Notes are saved while typing.
-        notes.addEventListener("input", function () {
-          task.notes = notes.value;
+        card.querySelector(".task-notes").addEventListener("input", function (event) {
+          task.notes = event.target.value;
           savePlannerData();
         });
-
-        // Delete removes this task from the selected day.
-        deleteButton.addEventListener("click", function () {
-          day.tasks = day.tasks.filter(function (savedTask) {
-            return savedTask.id !== task.id;
-          });
-
+        card.querySelector(".delete-button").addEventListener("click", function () {
+          day.tasks = day.tasks.filter((savedTask) => savedTask.id !== task.id);
           savePlannerData();
           renderTasks();
           renderDates();
           updateAnalyticsForRange(analyticsStartDate.value, analyticsEndDate.value);
         });
-
-        taskList.appendChild(taskCard);
+        taskList.appendChild(card);
       });
     }
 
-    // Draw the right-side list of days that have tasks or journal notes.
     function renderDates() {
       dateList.innerHTML = "";
-
       const plannedDates = Object.keys(plannerData)
-        .filter(function (date) {
-          const day = plannerData[date];
-          return day.tasks.length > 0 || (day.journal && day.journal.trim() !== "");
-        })
+        .filter((date) => plannerData[date].tasks.length > 0 || (plannerData[date].journal || "").trim() !== "")
         .sort()
         .reverse();
 
@@ -1598,200 +546,136 @@
       togglePlannedDatesButton.textContent = plannedDatesExpanded ? "Hide planned dates" : "Show planned dates";
       plannedDateSearch.hidden = !plannedDatesExpanded;
       showAllDatesButton.hidden = true;
-
-      if (!plannedDatesExpanded) {
-        return;
-      }
-
-      if (plannedDates.length === 0) {
-        dateList.innerHTML = '<div class="empty-message">No planned dates yet.</div>';
-        return;
-      }
+      if (!plannedDatesExpanded) return;
 
       const searchText = plannedDateSearch.value.trim();
-      const filteredDates = plannedDates.filter(function (date) {
-        return searchText === "" || date.includes(searchText);
-      });
-      const visibleDates = showingAllPlannedDates ? filteredDates : filteredDates.slice(0, 10);
-
+      const filteredDates = plannedDates.filter((date) => searchText === "" || date.includes(searchText));
       if (filteredDates.length === 0) {
         dateList.innerHTML = '<div class="empty-message">No dates match your search.</div>';
         return;
       }
-
+      const visibleDates = showingAllPlannedDates ? filteredDates : filteredDates.slice(0, 10);
       showAllDatesButton.hidden = filteredDates.length <= 10;
       showAllDatesButton.textContent = showingAllPlannedDates ? "Show latest 10" : "Show all";
 
       visibleDates.forEach(function (date) {
         const day = plannerData[date];
-        const doneCount = day.tasks.filter(function (task) {
-          updateOldTask(task);
-          return task.completed;
-        }).length;
-
-        const dateButton = document.createElement("button");
-        dateButton.className = "date-button";
-
-        if (date === plannerDate.value) {
-          dateButton.classList.add("active");
-        }
-
-        dateButton.innerHTML = `
-          <span>
-            <strong>${formatDate(date)}</strong>
-            <span class="date-meta">${day.tasks.length} task${day.tasks.length === 1 ? "" : "s"} - ${doneCount} done</span>
-          </span>
-          <span class="date-count">${day.tasks.length}</span>
-        `;
-
-        dateButton.addEventListener("click", function () {
+        const doneCount = day.tasks.filter((task) => task.completed).length;
+        const button = document.createElement("button");
+        button.className = `date-button ${date === plannerDate.value ? "active" : ""}`;
+        button.innerHTML = `<span><strong>${formatDate(date)}</strong><span class="date-meta">${day.tasks.length} task${day.tasks.length === 1 ? "" : "s"} - ${doneCount} done</span></span><span class="date-count">${day.tasks.length}</span>`;
+        button.addEventListener("click", function () {
           plannerDate.value = date;
           showSelectedDay();
         });
-
-        dateList.appendChild(dateButton);
+        dateList.appendChild(button);
       });
     }
 
-    // Analytics reads every task from every saved day.
     function getAllTasks() {
-      const allTasks = [];
-
-      Object.keys(plannerData).forEach(function (date) {
-        const day = plannerData[date];
-
-        day.tasks.forEach(function (task) {
-          updateOldTask(task);
-          allTasks.push(task);
-        });
-      });
-
-      return allTasks;
+      return Object.values(plannerData).flatMap((day) => day.tasks || []);
     }
 
-    // Choose the progress-bar color from the success rate.
+    function getFilteredTasks(startDateString, endDateString) {
+      const startDate = parseDateAtStart(startDateString);
+      const endDate = parseDateAtEnd(endDateString);
+
+      const filteredTasks = getAllTasks().filter(function (task) {
+        if (!task.createdAt) return false;
+        const taskDate = parseDateAtStart(task.createdAt);
+        return taskDate >= startDate && taskDate <= endDate;
+      });
+
+      return filteredTasks;
+    }
+
     function getSuccessColor(rate) {
-      const styles = getComputedStyle(document.body);
-
-      if (rate < 40) {
-        return styles.getPropertyValue("--progress-red").trim(); // red
-      }
-
-      if (rate < 70) {
-        return styles.getPropertyValue("--progress-yellow").trim(); // orange / yellow
-      }
-
-      return styles.getPropertyValue("--progress-green").trim(); // green
+      if (rate < 40) return "var(--danger)";
+      if (rate < 70) return "var(--warning)";
+      return "var(--success)";
     }
 
-    /*
-      Return only tasks created inside the selected range.
-      This uses string comparison because every date is stored as YYYY-MM-DD.
-      In that format, "2026-05-12" correctly sorts after "2026-05-01".
-    */
-    function filterTasksByDateRange(startDate, endDate) {
-      return getAllTasks().filter(function (task) {
-        if (!task.createdAt) {
-          return false;
-        }
+    function updateAnalyticsForRange(startDate, endDate) {
+      analyticsMessage.textContent = "";
+      if (!startDate || !endDate) {
+        selectedRangeText.textContent = "No range selected";
+        clearAnalytics("Please select both a start date and an end date.");
+        return;
+      }
+      if (parseDateAtStart(startDate) > parseDateAtEnd(endDate)) {
+        selectedRangeText.textContent = `${startDate} to ${endDate}`;
+        clearAnalytics("Start date cannot be after end date.");
+        return;
+      }
 
-        return task.createdAt >= startDate && task.createdAt <= endDate;
-      });
+      const filteredTasks = getFilteredTasks(startDate, endDate);
+      const total = filteredTasks.length;
+      const completed = filteredTasks.filter((task) => task.completed === true).length;
+      const failed = filteredTasks.filter((task) => task.completed !== true).length;
+      const successRate = total === 0 ? 0 : Math.round((completed / total) * 100);
+
+      selectedRangeText.textContent = `${startDate} to ${endDate}`;
+      totalTasksText.textContent = total;
+      completedTasksText.textContent = completed;
+      incompleteTasksText.textContent = failed;
+      successRateText.textContent = `${successRate}%`;
+      successProgressFill.style.width = `${successRate}%`;
+      successProgressFill.style.background = getSuccessColor(successRate);
+      analyticsMessage.textContent = total === 0 ? "No tasks found in this date range." : `Analyzed ${total} task(s) from ${startDate} to ${endDate}.`;
+      renderAnalysisTasks(filteredTasks);
     }
 
-    // Reset the visible analytics numbers.
-    function clearAnalyticsResults() {
+    function renderAnalysisTasks(filteredTasks) {
+      analysisTaskList.innerHTML = "";
+      if (filteredTasks.length === 0) {
+        analysisTaskList.innerHTML = '<div class="empty-message">No tasks to show for this range.</div>';
+        return;
+      }
+      filteredTasks
+        .slice()
+        .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+        .forEach(function (task) {
+          const item = document.createElement("div");
+          item.className = `analysis-task ${task.completed ? "done" : "failed"}`;
+          item.innerHTML = `
+            <strong>${escapeHTML(task.title)}</strong>
+            <span class="analysis-task-meta">${task.createdAt} · <span class="${task.completed ? "status-done" : "status-failed"}">${task.completed ? "Completed" : "Not completed"}</span></span>
+          `;
+          analysisTaskList.appendChild(item);
+        });
+    }
+
+    function clearAnalytics(message) {
       totalTasksText.textContent = "0";
       completedTasksText.textContent = "0";
       incompleteTasksText.textContent = "0";
       successRateText.textContent = "0%";
       successProgressFill.style.width = "0%";
       successProgressFill.style.background = getSuccessColor(0);
+      analyticsMessage.textContent = message;
+      analysisTaskList.innerHTML = '<div class="empty-message">No tasks to show.</div>';
     }
 
-    // Update analytics for the dates selected by the user.
-    function updateAnalyticsForRange(startDate, endDate) {
-      analyticsMessage.textContent = "";
-
-      if (!startDate || !endDate) {
-        selectedRangeText.textContent = "No range selected";
-        analyticsMessage.textContent = "Please select both a start date and an end date.";
-        clearAnalyticsResults();
-        return;
-      }
-
-      if (startDate > endDate) {
-        selectedRangeText.textContent = `${startDate} to ${endDate}`;
-        analyticsMessage.textContent = "Start date cannot be after end date.";
-        clearAnalyticsResults();
-        return;
-      }
-
-      const tasksInRange = filterTasksByDateRange(startDate, endDate);
-      const totalTasks = tasksInRange.length;
-      const completedTasks = tasksInRange.filter(function (task) {
-        return task.completed === true;
-      }).length;
-      const incompleteTasks = tasksInRange.filter(function (task) {
-        return task.completed !== true;
-      }).length;
-
-      let successRate = 0;
-
-      if (totalTasks > 0) {
-        successRate = Math.round((completedTasks / totalTasks) * 100);
-      }
-
-      selectedRangeText.textContent = `${startDate} to ${endDate}`;
-      totalTasksText.textContent = totalTasks;
-      completedTasksText.textContent = completedTasks;
-      incompleteTasksText.textContent = incompleteTasks;
-      successRateText.textContent = `${successRate}%`;
-      successProgressFill.style.width = `${successRate}%`;
-      successProgressFill.style.background = getSuccessColor(successRate);
-
-      if (totalTasks === 0) {
-        analyticsMessage.textContent = "No tasks found in this date range.";
-      } else {
-        analyticsMessage.textContent = `Analyzed ${totalTasks} task(s) from ${startDate} to ${endDate}.`;
-      }
-    }
-
-    // Start analytics on today's local date so the panel is useful immediately.
     function setDefaultAnalyticsDates() {
       const today = getLocalDateString();
-
       analyticsStartDate.value = today;
       analyticsEndDate.value = today;
-
       updateAnalyticsForRange(today, today);
     }
 
-    // Pick one quote for the current day. It will not change on refresh.
     function showQuote() {
       const dayIndex = Math.floor(Date.now() / (1000 * 60 * 60 * 24));
       const quote = quotes[dayIndex % quotes.length];
-
-      quoteText.classList.remove("quote-fade");
-      quoteAuthor.classList.remove("quote-fade");
       quoteText.textContent = quote.text;
       quoteAuthor.textContent = `— ${quote.author}`;
       quoteText.classList.add("quote-fade");
       quoteAuthor.classList.add("quote-fade");
     }
 
-    // Make YYYY-MM-DD easier to read.
     function formatDate(dateText) {
-      const date = new Date(`${dateText}T00:00:00`);
-
-      return date.toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric"
-      });
+      return new Date(`${dateText}T00:00:00`).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
     }
 
-    // This safely displays user text inside HTML.
     function escapeHTML(text) {
       return String(text)
         .replaceAll("&", "&amp;")
